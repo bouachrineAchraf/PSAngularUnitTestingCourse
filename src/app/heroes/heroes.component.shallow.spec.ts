@@ -1,14 +1,24 @@
 import {ComponentFixture, TestBed} from "@angular/core/testing"
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Component, EventEmitter, Input, NO_ERRORS_SCHEMA, Output } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { HeroesComponent } from "./heroes.component";
 import { HeroService } from "../hero.service";
 import { of } from "rxjs";
+import { Hero } from "../hero";
 
 describe('HeroesComponent (shallow test)', () => {
     let fixture: ComponentFixture<HeroesComponent>;
     let mockHeroService;
     let HEROES;
+
+    @Component({
+        selector: "app-hero",
+        template: "<div></div>"
+      })
+    class FakeHeroComponent {
+        @Input() hero: Hero;
+       // @Output() delete = new EventEmitter();
+    }
 
     beforeEach(()=> {
         HEROES = [ 
@@ -18,7 +28,7 @@ describe('HeroesComponent (shallow test)', () => {
         ]
         mockHeroService = jasmine.createSpyObj(['getHeroes', 'addHero', 'deleteHero']);
         TestBed.configureTestingModule({
-            declarations: [HeroesComponent],
+            declarations: [HeroesComponent, FakeHeroComponent],
             providers: [
                 {provide: HeroService, useValue: mockHeroService}
             ],
